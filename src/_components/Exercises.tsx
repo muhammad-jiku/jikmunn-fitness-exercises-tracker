@@ -34,26 +34,28 @@ const Exercises: React.FC<ExercisesProps> = ({
 
       if (bodyPart === 'all') {
         exercisesData = await fetchData(
-          'https://exercisedb.p.rapidapi.com/exercises',
+          'https://exercisedb.p.rapidapi.com/exercises?limit=10&offset=0',
           exerciseOptions
         );
       } else {
         exercisesData = await fetchData(
-          `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${bodyPart}`,
+          `https://exercisedb.p.rapidapi.com/exercises/bodyPart/back?limit=10&offset=0/${bodyPart}`,
           exerciseOptions
         );
       }
-
+      console.log('exercises data...', exercisesData);
       setExercises(exercisesData);
     };
 
     fetchExercisesData();
   }, [bodyPart, setExercises]);
 
+  console.log('exercise ', exercises);
+  console.log('exercise bodypart', bodyPart);
   // Pagination
   const indexOfLastExercise = currentPage * exercisesPerPage;
   const indexOfFirstExercise = indexOfLastExercise - exercisesPerPage;
-  const currentExercises = exercises.slice(
+  const currentExercises = exercises?.slice(
     indexOfFirstExercise,
     indexOfLastExercise
   );

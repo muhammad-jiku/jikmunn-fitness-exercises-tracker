@@ -48,6 +48,7 @@ const ExerciseVideos: React.FC<ExerciseVideosProps> = ({
             key={index}
             className='exercise-video'
             href={`https://www.youtube.com/watch?v=${item.video.videoId}`}
+            // href={`https://youtube-search-and-download.p.rapidapi.com/video?id=${item.video.videoId}`}
             target='_blank'
             rel='noreferrer'
           >
