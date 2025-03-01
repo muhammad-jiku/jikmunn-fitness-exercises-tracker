@@ -1,12 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CircularProgress } from '@mui/material';
 import { DateCalendar } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import WorkoutCard from '../_components/cards/WorkoutCard';
 import { getWorkouts } from '../_state/api';
@@ -76,24 +72,26 @@ const SecTitle = styled.div`
 `;
 
 const WorkoutsPage = () => {
-  const dispatch = useDispatch();
   const [todaysWorkouts, setTodaysWorkouts] = useState([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [date, setDate] = useState<string>('');
 
-  const getTodaysWorkout = async () => {
+  const getTodaysWorkout = useCallback(async () => {
     setLoading(true);
-    const token = localStorage.getItem('fittrack-app-token');
-    await getWorkouts(token, date ? `?date=${date}` : '').then((res) => {
-      setTodaysWorkouts(res?.data?.todaysWorkouts);
-      console.log(res.data);
-      setLoading(false);
-    });
-  };
+    const token = localStorage.getItem('fitness-exercise-tracker-token');
+    await getWorkouts(token as string, date ? `?date=${date}` : '').then(
+      (res) => {
+        setTodaysWorkouts(res?.data?.todaysWorkouts);
+        console.log(res.data);
+        setLoading(false);
+      }
+    );
+  }, [date]);
 
   useEffect(() => {
     getTodaysWorkout();
-  }, [date, getTodaysWorkout]);
+  }, [getTodaysWorkout]);
+
   return (
     <Container>
       <Wrapper>
@@ -101,9 +99,7 @@ const WorkoutsPage = () => {
           <Title>Select Date</Title>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateCalendar
-              onChange={(e: { $M: number; $D: any; $y: any }) =>
-                setDate(`${e.$M + 1}/${e.$D}/${e.$y}`)
-              }
+              onChange={(e) => setDate(`${e.$M + 1}/${e.$D}/${e.$y}`)}
             />
           </LocalizationProvider>
         </Left>

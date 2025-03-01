@@ -1,6 +1,17 @@
 import { PieChart } from '@mui/x-charts/PieChart';
 import styled from 'styled-components';
 
+interface PieChartDataItem {
+  label: string;
+  value: number;
+}
+
+interface CategoryChartProps {
+  data?: {
+    pieChartData?: PieChartDataItem[];
+  };
+}
+
 const Card = styled.div`
   flex: 1;
   min-width: 280px;
@@ -15,6 +26,7 @@ const Card = styled.div`
     padding: 16px;
   }
 `;
+
 const Title = styled.div`
   font-weight: 600;
   font-size: 16px;
@@ -24,7 +36,7 @@ const Title = styled.div`
   }
 `;
 
-const CategoryChart = ({ data }) => {
+const CategoryChart: React.FC<CategoryChartProps> = ({ data }) => {
   return (
     <Card>
       <Title>Weekly Calories Burned</Title>
@@ -32,7 +44,7 @@ const CategoryChart = ({ data }) => {
         <PieChart
           series={[
             {
-              data: data?.pieChartData,
+              data: data.pieChartData,
               innerRadius: 30,
               outerRadius: 120,
               paddingAngle: 5,

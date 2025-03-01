@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SetStateAction, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
@@ -26,10 +27,10 @@ const Span = styled.div`
 
 const SignIn = () => {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
-  const [buttonDisabled, setButtonDisabled] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
   const validateInputs = () => {
     if (!email || !password) {
@@ -39,22 +40,23 @@ const SignIn = () => {
     return true;
   };
 
-  const handelSignIn = async () => {
+  const handleSignIn = async () => {
     setLoading(true);
     setButtonDisabled(true);
-    if (validateInputs()) {
-      await UserSignIn({ email, password })
-        .then((res) => {
-          dispatch(loginSuccess(res.data));
-          alert('Login Success');
-          setLoading(false);
-          setButtonDisabled(false);
-        })
-        .catch((err) => {
-          alert(err.response.data.message);
-          setLoading(false);
-          setButtonDisabled(false);
-        });
+    if (!validateInputs()) {
+      setLoading(false);
+      setButtonDisabled(false);
+      return;
+    }
+    try {
+      const res = await UserSignIn({ email, password });
+      dispatch(loginSuccess(res.data));
+      alert('Sign in successfull!');
+    } catch (err: any) {
+      alert(err.response.data.message);
+    } finally {
+      setLoading(false);
+      setButtonDisabled(false);
     }
   };
 
@@ -78,18 +80,6 @@ const SignIn = () => {
           handelChange={(e: { target: { value: SetStateAction<string> } }) =>
             setEmail(e.target.value)
           }
-          name={undefined}
-          error={undefined}
-          textArea={undefined}
-          rows={undefined}
-          columns={undefined}
-          chipableInput={undefined}
-          chipableArray={undefined}
-          removeChip={undefined}
-          height={undefined}
-          small={undefined}
-          popup={undefined}
-          password={undefined}
         />
         <CustomTextInput
           label='Password'
@@ -99,30 +89,12 @@ const SignIn = () => {
           handelChange={(e: { target: { value: SetStateAction<string> } }) =>
             setPassword(e.target.value)
           }
-          name={undefined}
-          error={undefined}
-          textArea={undefined}
-          rows={undefined}
-          columns={undefined}
-          chipableInput={undefined}
-          chipableArray={undefined}
-          removeChip={undefined}
-          height={undefined}
-          small={undefined}
-          popup={undefined}
         />
         <CustomButton
           text='Sign In'
-          onClick={handelSignIn}
+          onClick={handleSignIn}
           isLoading={loading}
           isDisabled={buttonDisabled}
-          rightIcon={undefined}
-          leftIcon={undefined}
-          type={undefined}
-          flex={undefined}
-          small={undefined}
-          outlined={undefined}
-          full={undefined}
         />
       </div>
     </Container>

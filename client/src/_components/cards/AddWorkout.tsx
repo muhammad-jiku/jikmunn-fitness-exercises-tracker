@@ -1,7 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import styled from 'styled-components';
 import CustomButton from '../shared/CustomButton';
 import CustomTextInput from '../shared/CustomTextInput';
+
+interface AddWorkoutProps {
+  workout: string;
+  setWorkout: (value: string) => void;
+  addNewWorkout: () => void;
+  buttonLoading: boolean;
+}
 
 const Card = styled.div`
   flex: 1;
@@ -17,6 +23,7 @@ const Card = styled.div`
     padding: 16px;
   }
 `;
+
 const Title = styled.div`
   font-weight: 600;
   font-size: 16px;
@@ -26,7 +33,12 @@ const Title = styled.div`
   }
 `;
 
-const AddWorkout = ({ workout, setWorkout, addNewWorkout, buttonLoading }) => {
+const AddWorkout: React.FC<AddWorkoutProps> = ({
+  workout,
+  setWorkout,
+  addNewWorkout,
+  buttonLoading,
+}) => {
   return (
     <Card>
       <Title>Add New Workout</Title>
@@ -42,32 +54,16 @@ const AddWorkout = ({ workout, setWorkout, addNewWorkout, buttonLoading }) => {
 -Weight
 -Duration`}
         value={workout}
-        handelChange={(e: { target: { value: any } }) =>
-          setWorkout(e.target.value)
-        }
-        name={undefined}
-        error={undefined}
-        columns={undefined}
-        chipableInput={undefined}
-        chipableArray={undefined}
-        removeChip={undefined}
-        height={undefined}
-        small={undefined}
-        popup={undefined}
-        password={undefined}
+        handelChange={(
+          e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+        ) => setWorkout(e.target.value)}
       />
       <CustomButton
         text='Add Workout'
         small
-        onClick={() => addNewWorkout()}
+        onClick={addNewWorkout}
         isLoading={buttonLoading}
         isDisabled={buttonLoading}
-        rightIcon={undefined}
-        leftIcon={undefined}
-        type={undefined}
-        flex={undefined}
-        outlined={undefined}
-        full={undefined}
       />
     </Card>
   );

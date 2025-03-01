@@ -27,11 +27,11 @@ const Span = styled.div`
 
 const SignUp = () => {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
-  const [buttonDisabled, setButtonDisabled] = useState(false);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
+  const [name, setName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
   const validateInputs = () => {
     if (!name || !email || !password) {
@@ -41,14 +41,14 @@ const SignUp = () => {
     return true;
   };
 
-  const handelSignUp = async () => {
+  const handleSignUp = async () => {
     setLoading(true);
     setButtonDisabled(true);
     if (validateInputs()) {
       await UserSignUp({ name, email, password })
         .then((res: { data: any }) => {
           dispatch(loginSuccess(res.data));
-          alert('Account Created Success');
+          alert('Account created successfull!');
           setLoading(false);
           setButtonDisabled(false);
         })
@@ -79,18 +79,6 @@ const SignUp = () => {
           handelChange={(e: {
             target: { value: React.SetStateAction<string> };
           }) => setName(e.target.value)}
-          name={undefined}
-          error={undefined}
-          textArea={undefined}
-          rows={undefined}
-          columns={undefined}
-          chipableInput={undefined}
-          chipableArray={undefined}
-          removeChip={undefined}
-          height={undefined}
-          small={undefined}
-          popup={undefined}
-          password={undefined}
         />
         <CustomTextInput
           label='Email Address'
@@ -99,18 +87,6 @@ const SignUp = () => {
           handelChange={(e: {
             target: { value: React.SetStateAction<string> };
           }) => setEmail(e.target.value)}
-          name={undefined}
-          error={undefined}
-          textArea={undefined}
-          rows={undefined}
-          columns={undefined}
-          chipableInput={undefined}
-          chipableArray={undefined}
-          removeChip={undefined}
-          height={undefined}
-          small={undefined}
-          popup={undefined}
-          password={undefined}
         />
         <CustomTextInput
           label='Password'
@@ -120,30 +96,12 @@ const SignUp = () => {
           handelChange={(e: {
             target: { value: React.SetStateAction<string> };
           }) => setPassword(e.target.value)}
-          name={undefined}
-          error={undefined}
-          textArea={undefined}
-          rows={undefined}
-          columns={undefined}
-          chipableInput={undefined}
-          chipableArray={undefined}
-          removeChip={undefined}
-          height={undefined}
-          small={undefined}
-          popup={undefined}
         />
         <CustomButton
           text='Sign Up'
-          onClick={handelSignUp}
+          onClick={handleSignUp}
           isLoading={loading}
           isDisabled={buttonDisabled}
-          rightIcon={undefined}
-          leftIcon={undefined}
-          type={undefined}
-          flex={undefined}
-          small={undefined}
-          outlined={undefined}
-          full={undefined}
         />
       </div>
     </Container>

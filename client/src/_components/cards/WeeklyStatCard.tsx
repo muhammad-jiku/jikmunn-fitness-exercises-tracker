@@ -1,5 +1,19 @@
 import { BarChart } from '@mui/x-charts/BarChart';
+import React from 'react';
 import styled from 'styled-components';
+
+interface TotalWeeksCaloriesBurnt {
+  weeks: string[];
+  caloriesBurned: number[];
+}
+
+interface WeeklyStatData {
+  totalWeeksCaloriesBurnt?: TotalWeeksCaloriesBurnt;
+}
+
+interface WeeklyStatCardProps {
+  data?: WeeklyStatData;
+}
 
 const Card = styled.div`
   flex: 1;
@@ -15,6 +29,7 @@ const Card = styled.div`
     padding: 16px;
   }
 `;
+
 const Title = styled.div`
   font-weight: 600;
   font-size: 16px;
@@ -24,16 +39,16 @@ const Title = styled.div`
   }
 `;
 
-const WeeklyStatCard = ({ data }) => {
+const WeeklyStatCard: React.FC<WeeklyStatCardProps> = ({ data }) => {
   return (
     <Card>
       <Title>Weekly Calories Burned</Title>
       {data?.totalWeeksCaloriesBurnt && (
         <BarChart
           xAxis={[
-            { scaleType: 'band', data: data?.totalWeeksCaloriesBurnt?.weeks },
+            { scaleType: 'band', data: data.totalWeeksCaloriesBurnt.weeks },
           ]}
-          series={[{ data: data?.totalWeeksCaloriesBurnt?.caloriesBurned }]}
+          series={[{ data: data.totalWeeksCaloriesBurnt.caloriesBurned }]}
           height={300}
         />
       )}

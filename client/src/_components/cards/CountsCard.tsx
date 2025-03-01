@@ -1,4 +1,14 @@
+import { ReactNode } from 'react';
 import styled from 'styled-components';
+
+interface IconProps {
+  color: string;
+  bg: string;
+}
+
+interface SpanProps {
+  positive?: boolean;
+}
 
 const Card = styled.div`
   flex: 1;
@@ -10,6 +20,7 @@ const Card = styled.div`
   gap: 6px;
   box-shadow: 1px 6px 20px 0px ${({ theme }) => theme.primary + 15};
 `;
+
 const Left = styled.div`
   flex: 1;
   display: flex;
@@ -19,6 +30,7 @@ const Left = styled.div`
     gap: 6px;
   }
 `;
+
 const Title = styled.div`
   font-weight: 600;
   font-size: 16px;
@@ -27,6 +39,7 @@ const Title = styled.div`
     font-size: 14px;
   }
 `;
+
 const Value = styled.div`
   font-weight: 600;
   font-size: 32px;
@@ -38,36 +51,32 @@ const Value = styled.div`
     font-size: 22px;
   }
 `;
+
 const Unit = styled.div`
   font-size: 14px;
   margin-bottom: 8px;
 `;
-const Span = styled.div`
+
+const SpanStyled = styled.div<SpanProps>`
   margin-bottom: 8px;
   font-weight: 500;
   font-size: 16px;
   @media (max-width: 600px) {
     font-size: 12px;
   }
-
   ${({ positive, theme }) =>
-    positive
-      ? `
-  color: ${theme.green};`
-      : `
-  color: ${theme.red};`}
+    positive ? `color: ${theme.green};` : `color: ${theme.red};`}
 `;
-const Icon = styled.div`
+
+const Icon = styled.div<IconProps>`
   height: fit-content;
   padding: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 12px;
-  ${({ color, bg }) => `
-  background: ${bg};
-  color: ${color};
-  `}
+  background: ${({ bg }) => bg};
+  color: ${({ color }) => color};
 `;
 
 const Desc = styled.div`
@@ -79,15 +88,34 @@ const Desc = styled.div`
   }
 `;
 
-const CountsCard = ({ item, data }) => {
+// Define an interface for the item object.
+// Note: Using "dataKey" instead of "key" might avoid conflicts with React's reserved "key" prop.
+interface CountsCardItem {
+  name: string;
+  key: string;
+  unit: string;
+  desc: string;
+  color: string;
+  lightColor: string;
+  icon: ReactNode;
+}
+
+interface CountsCardProps {
+  item: CountsCardItem;
+  data?: { [key: string]: number };
+}
+
+const CountsCard: React.FC<CountsCardProps> = ({ item, data }) => {
   return (
     <Card>
       <Left>
         <Title>{item.name}</Title>
         <Value>
-          {data && data[item.key].toFixed(2)}
+          {data && data[item.key] !== undefined
+            ? data[item.key].toFixed(2)
+            : '0.00'}
           <Unit>{item.unit}</Unit>
-          <Span positive>(+10%)</Span>
+          <SpanStyled positive>(+10%)</SpanStyled>
         </Value>
         <Desc>{item.desc}</Desc>
       </Left>

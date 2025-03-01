@@ -7,6 +7,17 @@ import styled from 'styled-components';
 import { logout } from '../../_state/reducers/userSlice';
 import LogoImg from '../../assets/images/logo.png';
 
+interface MobileMenuProps {
+  isOpen: boolean;
+}
+
+interface NavbarProps {
+  currentUser: {
+    img?: string;
+    name: string;
+  } | null;
+}
+
 const Nav = styled.div`
   background-color: ${({ theme }) => theme.bg};
   height: 80px;
@@ -105,15 +116,14 @@ const TextButton = styled.div`
   }
 `;
 
-const MobileMenu = styled.ul`
+const MobileMenu = styled.ul<MobileMenuProps>`
   display: flex;
   flex-direction: column;
   align-items: start;
   gap: 16px;
-  padding: 0 6px;
+  padding: 12px 40px 24px 40px;
   list-style: none;
   width: 90%;
-  padding: 12px 40px 24px 40px;
   background: ${({ theme }) => theme.bg};
   position: absolute;
   top: 80px;
@@ -127,7 +137,7 @@ const MobileMenu = styled.ul`
   z-index: ${({ isOpen }) => (isOpen ? '1000' : '-1000')};
 `;
 
-const Navbar = ({ currentUser }) => {
+const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
   const dispatch = useDispatch();
   const [isOpen, setisOpen] = useState(false);
   return (

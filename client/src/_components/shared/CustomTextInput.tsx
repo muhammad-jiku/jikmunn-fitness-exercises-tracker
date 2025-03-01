@@ -2,14 +2,69 @@ import { CloseRounded, Visibility, VisibilityOff } from '@mui/icons-material';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-const Container = styled.div`
+interface LabelProps {
+  error?: string;
+  small?: boolean;
+  popup?: boolean;
+}
+
+interface OutlinedInputProps {
+  error?: string;
+  chipableInput?: boolean;
+  height?: string;
+  small?: boolean;
+  popup?: boolean;
+}
+
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  small?: boolean;
+  popup?: boolean;
+  // If you need to support "columns" or similar, you can add them here:
+  columns?: number;
+}
+
+interface ParagraphProps extends React.HTMLAttributes<HTMLParagraphElement> {
+  small?: boolean;
+  popup?: boolean;
+}
+
+interface DivProps extends React.HTMLAttributes<HTMLDivElement> {
+  small?: boolean;
+  // add any other custom props (e.g. popup, chipableInput, height) as needed
+  popup?: boolean;
+  chipableInput?: boolean;
+  height?: string;
+}
+
+interface CustomTextInputProps {
+  label: string;
+  placeholder?: string;
+  name?: string;
+  value: string;
+  error?: string;
+  handelChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
+  textArea?: boolean;
+  rows?: number;
+  columns?: number;
+  chipableInput?: boolean;
+  chipableArray?: string[];
+  removeChip?: (name: string, index: number) => void;
+  height?: string;
+  small?: boolean;
+  popup?: boolean;
+  password?: boolean;
+}
+
+const Container = styled.div<DivProps>`
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 6px;
 `;
 
-const Label = styled.label`
+const Label = styled.label<LabelProps>`
   font-size: 12px;
   color: ${({ theme }) => theme.text_primary};
   padding: 0px 4px;
@@ -26,11 +81,11 @@ const Label = styled.label`
   ${({ popup, theme }) =>
     popup &&
     `
-  color: ${theme.popup_text_secondary};
+    color: ${theme.popup_text_secondary};
   `}
 `;
 
-const OutlinedInput = styled.div`
+const OutlinedInput = styled.div<OutlinedInputProps>`
   border-radius: 8px;
   border: 0.5px solid ${({ theme }) => theme.text_secondary};
   background-color: transparent;
@@ -48,7 +103,6 @@ const OutlinedInput = styled.div`
     `
     border-color: ${theme.red};
   `}
-
   ${({ chipableInput, height, theme }) =>
     chipableInput &&
     `
@@ -56,25 +110,23 @@ const OutlinedInput = styled.div`
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
-    min-height: ${height}
+    min-height: ${height};
   `}
-
   ${({ small }) =>
     small &&
     `
     border-radius: 6px;
     padding: 8px 10px;
   `}
-
   ${({ popup, theme }) =>
     popup &&
     `
-  color: ${theme.popup_text_secondary};
-  border: 0.5px solid ${theme.popup_text_secondary + 60};
+    color: ${theme.popup_text_secondary};
+    border: 0.5px solid ${theme.popup_text_secondary + 60};
   `}
 `;
 
-const Input = styled.input`
+const Input = styled.input<InputProps>`
   width: 100%;
   font-size: 14px;
   outline: none;
@@ -89,32 +141,36 @@ const Input = styled.input`
     `
     font-size: 12px;
   `}
-
   ${({ popup, theme }) =>
     popup &&
     `
-  color: ${theme.popup_text_secondary};
-  `} ${({ theme }) => theme.popup_text_secondary};
+    color: ${theme.popup_text_secondary};
+  `}
 `;
 
-const Error = styled.p`
+const Error = styled.p<ParagraphProps>`
   font-size: 12px;
-  margin: 0px 4px;
+  margin: 0 4px;
   color: ${({ theme }) => theme.red};
   ${({ small }) =>
     small &&
     `
     font-size: 8px;
   `}
+  ${({ popup, theme }) =>
+    popup &&
+    `
+    color: ${theme.popup_text_secondary};
+  `}
 `;
 
-const ChipWrapper = styled.div`
+const ChipWrapper = styled.div<DivProps>`
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
 `;
 
-const Chip = styled.div`
+const Chip = styled.div<DivProps>`
   padding: 5px 10px;
   border-radius: 8px;
   background: ${({ theme }) => theme.primary + 10};
@@ -144,8 +200,8 @@ const CustomTextInput = ({
   small,
   popup,
   password,
-}) => {
-  const [showPassword, setShowPassword] = useState(false);
+}: CustomTextInputProps) => {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   return (
     <Container small={small}>
       <Label small={small} popup={popup} error={error}>
@@ -160,20 +216,24 @@ const CustomTextInput = ({
       >
         {chipableInput ? (
           <ChipWrapper>
-            {chipableArray.map((chip, index) => (
+            {chipableArray?.map((chip, index) => (
               <Chip key={index}>
                 <span>{chip}</span>
-                <CloseRounded
-                  sx={{ fontSize: '14px' }}
-                  onClick={() => removeChip(name, index)}
-                />
+                {removeChip && (
+                  <CloseRounded
+                    sx={{ fontSize: '14px' }}
+                    onClick={() => removeChip(name as string, index)}
+                  />
+                )}
               </Chip>
             ))}
             <Input
               placeholder={placeholder}
               name={name}
               value={value}
-              onChange={(e) => handelChange(e)}
+              onChange={(
+                e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+              ) => handelChange(e)}
             />
           </ChipWrapper>
         ) : (
@@ -187,7 +247,9 @@ const CustomTextInput = ({
               columns={columns}
               placeholder={placeholder}
               value={value}
-              onChange={(e) => handelChange(e)}
+              onChange={(
+                e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+              ) => handelChange(e)}
               type={password && !showPassword ? 'password' : 'text'}
             />
             {password && (

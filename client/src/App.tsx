@@ -5,6 +5,7 @@ import Navbar from './_components/shared/Navbar';
 import AuthPage from './_pages/AuthPage';
 import DashboardPage from './_pages/DashboardPage';
 import WorkoutsPage from './_pages/WorkoutsPage';
+import { RootState } from './_state/store';
 import { lightTheme } from './utils/theme';
 
 const Container = styled.div`
@@ -20,7 +21,7 @@ const Container = styled.div`
 `;
 
 function App() {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state: RootState) => state.user);
 
   return (
     <ThemeProvider theme={lightTheme}>
@@ -29,8 +30,8 @@ function App() {
           <Container>
             <Navbar currentUser={currentUser} />
             <Routes>
-              <Route path='/' exact element={<DashboardPage />} />
-              <Route path='/workouts' exact element={<WorkoutsPage />} />
+              <Route path='/' element={<DashboardPage />} />
+              <Route path='/workouts' element={<WorkoutsPage />} />
             </Routes>
           </Container>
         ) : (

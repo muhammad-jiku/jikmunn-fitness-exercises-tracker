@@ -1,5 +1,22 @@
 import { FitnessCenterRounded, TimelapseRounded } from '@mui/icons-material';
+import React from 'react';
 import styled from 'styled-components';
+
+// Define an interface for the workout object.
+// Mark properties as optional if they might not be present.
+interface Workout {
+  category?: string;
+  workoutName?: string;
+  sets?: number;
+  reps?: number;
+  weight?: number;
+  duration?: number;
+}
+
+// Define the props interface for the WorkoutCard component.
+interface WorkoutCardProps {
+  workout: Workout;
+}
 
 const Card = styled.div`
   flex: 1;
@@ -16,6 +33,7 @@ const Card = styled.div`
     padding: 12px 14px;
   }
 `;
+
 const Category = styled.div`
   width: fit-content;
   font-size: 14px;
@@ -25,11 +43,13 @@ const Category = styled.div`
   padding: 4px 10px;
   border-radius: 8px;
 `;
+
 const Name = styled.div`
   font-size: 20px;
   color: ${({ theme }) => theme.text_primary};
   font-weight: 600;
 `;
+
 const Sets = styled.div`
   font-size: 15px;
   color: ${({ theme }) => theme.text_secondary};
@@ -37,10 +57,12 @@ const Sets = styled.div`
   display: flex;
   gap: 6px;
 `;
+
 const Flex = styled.div`
   display: flex;
   gap: 16px;
 `;
+
 const Details = styled.div`
   font-size: 15px;
   color: ${({ theme }) => theme.text_primary};
@@ -50,22 +72,22 @@ const Details = styled.div`
   gap: 6px;
 `;
 
-const WorkoutCard = ({ workout }) => {
+const WorkoutCard: React.FC<WorkoutCardProps> = ({ workout }) => {
   return (
     <Card>
-      <Category>#{workout?.category}</Category>
-      <Name>{workout?.workoutName}</Name>
+      <Category>#{workout.category}</Category>
+      <Name>{workout.workoutName}</Name>
       <Sets>
-        Count: {workout?.sets} sets X {workout?.reps} reps
+        Count: {workout.sets} sets X {workout.reps} reps
       </Sets>
       <Flex>
         <Details>
           <FitnessCenterRounded sx={{ fontSize: '20px' }} />
-          {workout?.weight} kg
+          {workout.weight} kg
         </Details>
         <Details>
           <TimelapseRounded sx={{ fontSize: '20px' }} />
-          {workout?.duration} min
+          {workout.duration} min
         </Details>
       </Flex>
     </Card>
