@@ -24,6 +24,13 @@ export interface ILoginUser {
 }
 
 export interface ILoginUserResponse {
+  user: IUser;
+  accessToken: string;
+  refreshToken?: string;
+}
+
+export interface IUserResponse {
+  user: IUser;
   accessToken: string;
   refreshToken?: string;
 }

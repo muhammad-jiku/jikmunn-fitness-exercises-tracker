@@ -7,19 +7,24 @@ import { jwtHelpers } from '../../helpers/jwt';
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const token = req.headers.authorization;
-    if (!token) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
       throw new ApiError(
         httpStatus.UNAUTHORIZED,
         'Sorry, you are not authorized to access this route!'
       );
     }
 
+    const token = authHeader.split(' ')[1];
+    if (!token) {
+      throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid token format!');
+    }
+
     const verifiedUserToken = jwtHelpers.verifyToken(
       token,
       config.jwt.secret as Secret
     );
-    req.user = verifiedUserToken; // Contains user data
+    req.user = verifiedUserToken;
 
     next();
   } catch (error) {

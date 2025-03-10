@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { UserSignIn } from '../../_state/api';
@@ -14,11 +14,13 @@ const Container = styled.div`
   flex-direction: column;
   gap: 36px;
 `;
+
 const Title = styled.div`
   font-size: 30px;
   font-weight: 800;
   color: ${({ theme }) => theme.text_primary};
 `;
+
 const Span = styled.div`
   font-size: 16px;
   font-weight: 400;
@@ -50,8 +52,10 @@ const SignIn = () => {
     }
     try {
       const res = await UserSignIn({ email, password });
-      dispatch(loginSuccess(res.data));
-      alert('Sign in successfull!');
+      // Dispatching loginSuccess action with the full response payload.
+      // Expected res.data: { user, accessToken, refreshToken }
+      dispatch(loginSuccess(res));
+      alert('Sign in successful!');
     } catch (err: any) {
       alert(err.response.data.message);
     } finally {
@@ -66,18 +70,12 @@ const SignIn = () => {
         <Title>Welcome to Fitness Exercise Tracker 👋</Title>
         <Span>Please login with your details here</Span>
       </div>
-      <div
-        style={{
-          display: 'flex',
-          gap: '20px',
-          flexDirection: 'column',
-        }}
-      >
+      <div style={{ display: 'flex', gap: '20px', flexDirection: 'column' }}>
         <CustomTextInput
           label='Email Address'
           placeholder='Enter your email address'
           value={email}
-          handelChange={(e: { target: { value: SetStateAction<string> } }) =>
+          handelChange={(e: { target: { value: string } }) =>
             setEmail(e.target.value)
           }
         />
@@ -86,7 +84,7 @@ const SignIn = () => {
           placeholder='Enter your password'
           password
           value={password}
-          handelChange={(e: { target: { value: SetStateAction<string> } }) =>
+          handelChange={(e: { target: { value: string } }) =>
             setPassword(e.target.value)
           }
         />

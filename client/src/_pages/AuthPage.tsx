@@ -77,7 +77,7 @@ const AuthPage = () => {
             <SignIn />
             <Text>
               Don't have an account?{' '}
-              <TextButton onClick={() => setLogin(true)}>SignUp</TextButton>
+              <TextButton onClick={() => setLogin(true)}>Sign Up</TextButton>
             </Text>
           </>
         ) : (
@@ -85,7 +85,7 @@ const AuthPage = () => {
             <SignUp />
             <Text>
               Already have an account?{' '}
-              <TextButton onClick={() => setLogin(false)}>SignIn</TextButton>
+              <TextButton onClick={() => setLogin(false)}>Sign In</TextButton>
             </Text>
           </>
         )}

@@ -168,8 +168,8 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
         </NavItems>
 
         <UserContainer>
-          <Avatar src={currentUser?.img}>{currentUser?.name[0]}</Avatar>
-          <TextButton onClick={() => dispatch(logout())}>Logout</TextButton>
+          <Avatar src={currentUser?.img}>{currentUser?.name?.[0]}</Avatar>
+          <TextButton onClick={() => dispatch(logout())}>Sign out</TextButton>
         </UserContainer>
       </NavContainer>
     </Nav>

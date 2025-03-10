@@ -5,16 +5,20 @@ import config from '../../../config';
 import ApiError from '../../../errors/handleApiError';
 import { jwtHelpers } from '../../../helpers/jwt';
 import { Workout } from '../workout/workout.models';
-import { ILoginUser, ILoginUserResponse, IUser } from './user.interfaces';
+import {
+  ILoginUser,
+  ILoginUserResponse,
+  IUser,
+  IUserResponse,
+} from './user.interfaces';
 import { User } from './user.models';
 
-const insertUserIntoDB = async (user: IUser): Promise<IUser | null> => {
-  // user password
+const insertUserIntoDB = async (user: IUser): Promise<IUserResponse | null> => {
   if (!user.password) {
     user.password = config.default.user_pass as string;
   }
 
-  let newUserAllData = null;
+  let newUserAllData: IUser | null = null;
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
@@ -26,7 +30,8 @@ const insertUserIntoDB = async (user: IUser): Promise<IUser | null> => {
         'Failed to create user profile!'
       );
     }
-    newUserAllData = newUser[0];
+    // Convert the Mongoose document to a plain object
+    newUserAllData = newUser[0].toObject() as IUser;
 
     await session.commitTransaction();
     await session.endSession();
@@ -37,10 +42,30 @@ const insertUserIntoDB = async (user: IUser): Promise<IUser | null> => {
   }
 
   if (newUserAllData) {
-    newUserAllData = await User.findOne({ email: newUserAllData.email });
-  }
+    // Use lean() to get a plain JS object, ensuring type consistency
+    newUserAllData = (await User.findOne({
+      email: newUserAllData.email,
+    }).lean()) as IUser;
 
-  return newUserAllData;
+    const accessToken = jwtHelpers.createToken(
+      { email: newUserAllData.email },
+      config.jwt.secret as Secret,
+      config.jwt.expires_in as SignOptions['expiresIn']
+    );
+
+    const refreshToken = jwtHelpers.createToken(
+      { email: newUserAllData.email },
+      config.jwt.refresh_secret as Secret,
+      config.jwt.refresh_expires_in as SignOptions['expiresIn']
+    );
+
+    return {
+      user: newUserAllData,
+      accessToken,
+      refreshToken,
+    };
+  }
+  return null;
 };
 
 const loginUserIntoDB = async (
@@ -48,35 +73,35 @@ const loginUserIntoDB = async (
 ): Promise<ILoginUserResponse> => {
   const { email, password } = payload;
 
-  const isUserExist = await User.isUserExist(email);
-  if (!isUserExist) {
+  const userExist = await User.isUserExist(email);
+  if (!userExist) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist!');
   }
 
+  // Cast the result to a full IUser (assuming img and age can be optional)
+  const fullUser = userExist as IUser;
+
   if (
-    isUserExist.password &&
-    !(await User.isPasswordMatch(password, isUserExist?.password as string))
+    fullUser.password &&
+    !(await User.isPasswordMatch(password, fullUser.password as string))
   ) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Password mismatched!');
   }
 
-  //   const { id: userId, role, needsPasswordChange } = isUserExist;
-  const { email: userEmail } = isUserExist;
-
-  // creating access and refresh tokens
   const accessToken = jwtHelpers.createToken(
-    { userEmail },
+    { email: fullUser.email },
     config.jwt.secret as Secret,
     config.jwt.expires_in as SignOptions['expiresIn']
   );
 
   const refreshToken = jwtHelpers.createToken(
-    { email: userEmail },
+    { email: fullUser.email },
     config.jwt.refresh_secret as Secret,
     config.jwt.refresh_expires_in as SignOptions['expiresIn']
   );
 
   return {
+    user: fullUser,
     accessToken,
     refreshToken,
   };

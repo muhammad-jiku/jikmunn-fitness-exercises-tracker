@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-interface UserSignUpData {
+export interface UserSignUpData {
   name: string;
   email: string;
   password: string;
@@ -28,7 +28,10 @@ const API = axios.create({
 
 // Define API functions with proper types
 export const UserSignUp = async (data: UserSignUpData) =>
+  // {
+  //   console.log('api user sign up', data);
   API.post('/users/create', data);
+// };
 
 export const UserSignIn = async (data: UserSignInData) =>
   API.post('/users/login', data);
