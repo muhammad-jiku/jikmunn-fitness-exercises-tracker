@@ -7,12 +7,10 @@ import { WorkoutServices } from './workout.services';
 const getWorkoutsByDate = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // Get user id from the authenticated request (populated by your auth middleware)
-      const userId = req.user?.id as string;
-      // Optionally get the date query parameter (defaults to current date in the service)
+      const userEmail = req.user?.email as string;
       const date = req.query.date as string;
 
-      const result = await WorkoutServices.getWorkoutsByDate(userId, date);
+      const result = await WorkoutServices.getWorkoutsByDate(userEmail, date);
 
       sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -29,11 +27,10 @@ const getWorkoutsByDate = catchAsync(
 const addWorkout = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // Get user id and workout string from the request
-      const userId = req.user?.id as string;
+      const userEmail = req.user?.email as string;
       const { workoutString } = req.body;
 
-      const result = await WorkoutServices.addWorkout(userId, workoutString);
+      const result = await WorkoutServices.addWorkout(userEmail, workoutString);
 
       sendResponse(res, {
         statusCode: httpStatus.CREATED,

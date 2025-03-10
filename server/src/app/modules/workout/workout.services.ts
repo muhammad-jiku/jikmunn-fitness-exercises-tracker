@@ -1,4 +1,3 @@
-// workout.services.ts
 import httpStatus from 'http-status';
 import ApiError from '../../../errors/handleApiError';
 import { User } from '../user/user.models';
@@ -13,11 +12,11 @@ import { WorkoutUtils } from './workout.utils';
  * @throws ApiError if the user is not found.
  */
 export const getWorkoutsByDate = async (
-  userId: string,
+  userEmail: string,
   dateString?: string
 ): Promise<{ todaysWorkouts: any[]; totalCaloriesBurned: number }> => {
   // Verify user exists
-  const user = await User.findById(userId);
+  const user = await User.findOne({ email: userEmail });
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
@@ -37,7 +36,7 @@ export const getWorkoutsByDate = async (
 
   // Fetch workouts for the given date range
   const todaysWorkouts = await Workout.find({
-    user: userId,
+    user: user._id,
     date: { $gte: startOfDay, $lt: endOfDay },
   });
 
@@ -52,16 +51,21 @@ export const getWorkoutsByDate = async (
 
 /**
  * Adds workouts parsed from a workout string.
- * @param userId - The ID of the user to which the workouts belong.
+ * @param userEmail - The ID of the user to which the workouts belong.
  * @param workoutString - A string containing one or more workouts; workouts are separated by ";".
  *                        Each workout should start with a category indicated by "#" and contain details in subsequent lines.
  * @returns An object with a success message and the parsed workout data.
  * @throws ApiError for various input errors (missing workout string, missing categories, or bad format).
  */
 export const addWorkout = async (
-  userId: string,
+  userEmail: string,
   workoutString: string
 ): Promise<{ message: string; workouts: any[] }> => {
+  const user = await User.findOne({ email: userEmail });
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+
   if (!workoutString) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Workout string is missing');
   }
@@ -123,7 +127,7 @@ export const addWorkout = async (
       WorkoutUtils.calculateCaloriesBurned(workout).toString()
     );
     // Save the workout with the associated user.
-    await Workout.create({ ...workout, user: userId });
+    await Workout.create({ ...workout, user: user._id });
   }
 
   return {

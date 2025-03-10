@@ -8,6 +8,7 @@ import { jwtHelpers } from '../../helpers/jwt';
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers.authorization;
+    console.log('auth header: ' + authHeader);
     if (!authHeader) {
       throw new ApiError(
         httpStatus.UNAUTHORIZED,
@@ -16,6 +17,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     const token = authHeader.split(' ')[1];
+    console.log('token ', token);
     if (!token) {
       throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid token format!');
     }

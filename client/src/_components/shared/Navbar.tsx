@@ -140,6 +140,7 @@ const MobileMenu = styled.ul<MobileMenuProps>`
 const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
   const dispatch = useDispatch();
   const [isOpen, setisOpen] = useState(false);
+
   return (
     <Nav>
       <NavContainer>
@@ -169,7 +170,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
 
         <UserContainer>
           <Avatar src={currentUser?.img}>{currentUser?.name?.[0]}</Avatar>
-          <TextButton onClick={() => dispatch(logout())}>Sign out</TextButton>
+          <TextButton onClick={() => dispatch(logout())}>Sign Out</TextButton>
         </UserContainer>
       </NavContainer>
     </Nav>

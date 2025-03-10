@@ -81,7 +81,7 @@ const WorkoutsPage = () => {
     const token = localStorage.getItem('fitness-exercise-tracker-token');
     await getWorkouts(token as string, date ? `?date=${date}` : '').then(
       (res) => {
-        setTodaysWorkouts(res?.data?.todaysWorkouts);
+        setTodaysWorkouts(res?.data?.data?.todaysWorkouts);
         console.log(res.data);
         setLoading(false);
       }

@@ -42,8 +42,9 @@ const getUserDashboard = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       // Assuming req.user is populated by an auth middleware
-      const userId = req.user?.id as string;
-      const result = await UserServices.getUserDashboard(userId);
+      const userEmail = req.user?.email as string;
+      console.log('user id', req.user);
+      const result = await UserServices.getUserDashboard(userEmail);
       sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,

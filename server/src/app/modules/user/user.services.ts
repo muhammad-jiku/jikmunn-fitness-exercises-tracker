@@ -107,9 +107,9 @@ const loginUserIntoDB = async (
   };
 };
 
-const getUserDashboard = async (userId: string) => {
+const getUserDashboard = async (userEmail: string) => {
   // Retrieve the user based on the provided userId
-  const user = await User.findById(userId);
+  const user = await User.findOne({ email: userEmail });
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
