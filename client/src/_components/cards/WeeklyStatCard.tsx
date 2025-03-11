@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { BarChart } from '@mui/x-charts/BarChart';
 import React from 'react';
 import styled from 'styled-components';
@@ -8,6 +9,7 @@ interface TotalWeeksCaloriesBurnt {
 }
 
 interface WeeklyStatData {
+  data: any;
   totalWeeksCaloriesBurnt?: TotalWeeksCaloriesBurnt;
 }
 
@@ -40,15 +42,22 @@ const Title = styled.div`
 `;
 
 const WeeklyStatCard: React.FC<WeeklyStatCardProps> = ({ data }) => {
+  console.log('weekly stat data', data);
+  console.log('weekly stat data burned', data?.data?.totalWeeksCaloriesBurnt);
   return (
     <Card>
       <Title>Weekly Calories Burned</Title>
-      {data?.totalWeeksCaloriesBurnt && (
+      {data?.data?.totalWeeksCaloriesBurnt && (
         <BarChart
           xAxis={[
-            { scaleType: 'band', data: data.totalWeeksCaloriesBurnt.weeks },
+            {
+              scaleType: 'band',
+              data: data?.data?.totalWeeksCaloriesBurnt?.weeks,
+            },
           ]}
-          series={[{ data: data.totalWeeksCaloriesBurnt.caloriesBurned }]}
+          series={[
+            { data: data?.data?.totalWeeksCaloriesBurnt.caloriesBurned },
+          ]}
           height={300}
         />
       )}

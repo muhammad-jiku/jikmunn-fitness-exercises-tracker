@@ -73,6 +73,7 @@ const Details = styled.div`
 `;
 
 const WorkoutCard: React.FC<WorkoutCardProps> = ({ workout }) => {
+  console.log('workout card', workout);
   return (
     <Card>
       <Category>#{workout.category}</Category>
