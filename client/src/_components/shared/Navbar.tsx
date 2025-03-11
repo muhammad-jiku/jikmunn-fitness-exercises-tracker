@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link as LinkR, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import { logout } from '../../_state/reducers/userSlice';
+import { signout } from '../../_state/reducers/userSlice';
 import LogoImg from '../../assets/images/logo.png';
 
 interface MobileMenuProps {
@@ -31,6 +31,7 @@ const Nav = styled.div`
   color: white;
   border-bottom: 1px solid ${({ theme }) => theme.text_secondary + 20};
 `;
+
 const NavContainer = styled.div`
   width: 100%;
   max-width: 1400px;
@@ -41,6 +42,7 @@ const NavContainer = styled.div`
   justify-content: space-between;
   font-size: 1rem;
 `;
+
 const NavLogo = styled(LinkR)`
   width: 100%;
   display: flex;
@@ -52,9 +54,11 @@ const NavLogo = styled(LinkR)`
   text-decoration: none;
   color: ${({ theme }) => theme.black};
 `;
+
 const Logo = styled.img`
   height: 42px;
 `;
+
 const Mobileicon = styled.div`
   color: ${({ theme }) => theme.text_primary};
   display: none;
@@ -77,6 +81,7 @@ const NavItems = styled.ul`
     display: none;
   }
 `;
+
 const Navlink = styled(NavLink)`
   display: flex;
   align-items: center;
@@ -104,6 +109,7 @@ const UserContainer = styled.div`
   padding: 0 6px;
   color: ${({ theme }) => theme.primary};
 `;
+
 const TextButton = styled.div`
   text-align: end;
   color: ${({ theme }) => theme.secondary};
@@ -149,28 +155,28 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
         </Mobileicon>
         <NavLogo to='/'>
           <Logo src={LogoImg} />
-          Fittrack
+          Fitness Tracker
         </NavLogo>
 
         <MobileMenu isOpen={isOpen}>
           <Navlink to='/'>Dashboard</Navlink>
           <Navlink to='/workouts'>Workouts</Navlink>
-          <Navlink to='/tutorials'>Tutorials</Navlink>
+          {/* <Navlink to='/tutorials'>Tutorials</Navlink>
           <Navlink to='/blogs'>Blogs</Navlink>
-          <Navlink to='/contact'>Contact</Navlink>
+          <Navlink to='/contact'>Contact</Navlink> */}
         </MobileMenu>
 
         <NavItems>
           <Navlink to='/'>Dashboard</Navlink>
           <Navlink to='/workouts'>Workouts</Navlink>
-          <Navlink to='/tutorials'>Tutorials</Navlink>
+          {/* <Navlink to='/tutorials'>Tutorials</Navlink>
           <Navlink to='/blogs'>Blogs</Navlink>
-          <Navlink to='/contact'>Contact</Navlink>
+          <Navlink to='/contact'>Contact</Navlink> */}
         </NavItems>
 
         <UserContainer>
           <Avatar src={currentUser?.img}>{currentUser?.name?.[0]}</Avatar>
-          <TextButton onClick={() => dispatch(logout())}>Sign Out</TextButton>
+          <TextButton onClick={() => dispatch(signout())}>Sign Out</TextButton>
         </UserContainer>
       </NavContainer>
     </Nav>

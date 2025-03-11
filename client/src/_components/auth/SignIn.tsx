@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { UserSignIn } from '../../_state/api';
-import { loginSuccess } from '../../_state/reducers/userSlice';
+import { signinSuccess } from '../../_state/reducers/userSlice';
 import CustomButton from '../shared/CustomButton';
 import CustomTextInput from '../shared/CustomTextInput';
 
@@ -52,9 +52,9 @@ const SignIn = () => {
     }
     try {
       const res = await UserSignIn({ email, password });
-      // Dispatching loginSuccess action with the full response payload.
+      // Dispatching signinSuccess action with the full response payload.
       // Expected res.data: { user, accessToken, refreshToken }
-      dispatch(loginSuccess(res));
+      dispatch(signinSuccess(res));
       alert('Sign in successful!');
     } catch (err: any) {
       alert(err.response.data.message);
@@ -68,7 +68,7 @@ const SignIn = () => {
     <Container>
       <div>
         <Title>Welcome to Fitness Exercise Tracker 👋</Title>
-        <Span>Please login with your details here</Span>
+        <Span>Please sign in with your details here</Span>
       </div>
       <div style={{ display: 'flex', gap: '20px', flexDirection: 'column' }}>
         <CustomTextInput

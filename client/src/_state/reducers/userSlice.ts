@@ -19,7 +19,7 @@ export const userSlice = createSlice({
         action.payload.data.data.refreshToken
       );
     },
-    loginSuccess: (state, action) => {
+    signinSuccess: (state, action) => {
       console.log('action payload..', action.payload);
       state.currentUser = action.payload.data.data.user;
       localStorage.setItem(
@@ -31,7 +31,7 @@ export const userSlice = createSlice({
         action.payload.data.data.refreshToken
       );
     },
-    logout: (state) => {
+    signout: (state) => {
       state.currentUser = null;
       localStorage.removeItem('fitness-exercise-tracker-token');
       localStorage.removeItem('fitness-exercise-tracker-refresh-token');
@@ -39,6 +39,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const { signupSuccess, loginSuccess, logout } = userSlice.actions;
+export const { signupSuccess, signinSuccess, signout } = userSlice.actions;
 
 export default userSlice.reducer;

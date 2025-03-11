@@ -21,8 +21,7 @@ const Container = styled.div`
 `;
 
 function App() {
-  const { currentUser } = useSelector((state: RootState) => state.user);
-  console.log('first user', currentUser);
+  const { currentUser } = useSelector((state: RootState) => state?.user);
 
   return (
     <ThemeProvider theme={lightTheme}>

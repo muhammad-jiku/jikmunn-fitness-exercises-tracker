@@ -106,6 +106,10 @@ interface CountsCardProps {
 }
 
 const CountsCard: React.FC<CountsCardProps> = ({ item, data }) => {
+  console.log('counts item', item);
+  console.log('counts data', data);
+  console.log('data and item testing', data && data[item.key]);
+  // console.log('data and item info', data[item.key].toFixed(2));
   return (
     <Card>
       <Left>

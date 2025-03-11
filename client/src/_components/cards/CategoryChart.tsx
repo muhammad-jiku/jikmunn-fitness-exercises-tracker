@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PieChart } from '@mui/x-charts/PieChart';
 import styled from 'styled-components';
 
@@ -9,7 +8,6 @@ interface PieChartDataItem {
 
 interface CategoryChartProps {
   data?: {
-    data: any;
     pieChartData?: PieChartDataItem[];
   };
 }
@@ -43,11 +41,11 @@ const CategoryChart: React.FC<CategoryChartProps> = ({ data }) => {
   return (
     <Card>
       <Title>Weekly Calories Burned</Title>
-      {data?.data?.pieChartData && (
+      {data?.pieChartData && (
         <PieChart
           series={[
             {
-              data: data?.data?.pieChartData,
+              data: data?.pieChartData,
               innerRadius: 30,
               outerRadius: 120,
               paddingAngle: 5,

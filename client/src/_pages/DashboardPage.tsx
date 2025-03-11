@@ -18,6 +18,7 @@ const Container = styled.div`
   padding: 22px 0px;
   overflow-y: scroll;
 `;
+
 const Wrapper = styled.div`
   flex: 1;
   max-width: 1400px;
@@ -28,12 +29,14 @@ const Wrapper = styled.div`
     gap: 12px;
   }
 `;
+
 const Title = styled.div`
   padding: 0px 16px;
   font-size: 22px;
   color: ${({ theme }) => theme.text_primary};
   font-weight: 500;
 `;
+
 const FlexWrap = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -44,6 +47,7 @@ const FlexWrap = styled.div`
     gap: 12px;
   }
 `;
+
 const Section = styled.div`
   display: flex;
   flex-direction: column;
@@ -54,6 +58,7 @@ const Section = styled.div`
     gap: 12px;
   }
 `;
+
 const CardWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -80,11 +85,12 @@ const DashboardPage = () => {
     setLoading(true);
     const token = localStorage.getItem('fitness-exercise-tracker-token');
     await getDashboardDetails(token as string).then((res) => {
-      setData(res.data);
+      setData(res?.data?.data);
       console.log(res.data);
       setLoading(false);
     });
   };
+
   const getTodaysWorkout = async () => {
     setLoading(true);
     const token = localStorage.getItem('fitness-exercise-tracker-token');

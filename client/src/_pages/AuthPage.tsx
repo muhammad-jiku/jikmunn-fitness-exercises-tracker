@@ -14,6 +14,7 @@ const Container = styled.div`
     flex-direction: column;
   }
 `;
+
 const Left = styled.div`
   flex: 1;
   position: relative;
@@ -21,6 +22,7 @@ const Left = styled.div`
     display: none;
   }
 `;
+
 const Logo = styled.img`
   position: absolute;
   width: 70px;
@@ -28,6 +30,7 @@ const Logo = styled.img`
   left: 60px;
   z-index: 10;
 `;
+
 const Image = styled.img`
   position: relative;
   height: 100%;
@@ -55,6 +58,7 @@ const Text = styled.div`
     font-size: 14px;
   }
 `;
+
 const TextButton = styled.span`
   color: ${({ theme }) => theme.primary};
   cursor: pointer;
@@ -63,7 +67,7 @@ const TextButton = styled.span`
 `;
 
 const AuthPage = () => {
-  const [login, setLogin] = useState<boolean>(false);
+  const [signin, setSignin] = useState<boolean>(false);
 
   return (
     <Container>
@@ -72,12 +76,12 @@ const AuthPage = () => {
         <Image src={AuthImage} />
       </Left>
       <Right>
-        {!login ? (
+        {!signin ? (
           <>
             <SignIn />
             <Text>
               Don't have an account?{' '}
-              <TextButton onClick={() => setLogin(true)}>Sign Up</TextButton>
+              <TextButton onClick={() => setSignin(true)}>Sign Up</TextButton>
             </Text>
           </>
         ) : (
@@ -85,7 +89,7 @@ const AuthPage = () => {
             <SignUp />
             <Text>
               Already have an account?{' '}
-              <TextButton onClick={() => setLogin(false)}>Sign In</TextButton>
+              <TextButton onClick={() => setSignin(false)}>Sign In</TextButton>
             </Text>
           </>
         )}
