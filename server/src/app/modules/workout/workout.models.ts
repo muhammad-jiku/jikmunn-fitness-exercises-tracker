@@ -10,7 +10,7 @@ const workoutSchema = new Schema<IWorkout, IWorkoutModel>(
     workoutName: {
       type: String,
       required: true,
-      unique: true,
+      // unique: true,
     },
     sets: {
       type: Number,
