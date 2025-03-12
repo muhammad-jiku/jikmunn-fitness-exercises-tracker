@@ -2,33 +2,38 @@ import { Server } from 'http';
 import mongoose from 'mongoose';
 import app from './app';
 import config from './config';
-import { errorlogger, logger } from './shared/logger';
+// import { errorlogger, logger } from './shared/logger';
 
 process.on('uncaughtException', (error) => {
-  errorlogger.error(error);
+  // errorlogger.error(error);
+  console.error(error);
   process.exit(1);
 });
 
 let server: Server;
 async function bootstrap() {
   await mongoose.connect(config.database_url as string);
-  logger.info(`Database is connected successfully!`);
+  // logger.info(`Database is connected successfully!`);
+  console.log(`Database is connected successfully!`);
 
   server = app.listen(config.port, () => {
-    logger.info(`Server is running on http://localhost:${config.port}`);
+    // logger.info(`Server is running on http://localhost:${config.port}`);
+    console.log(`Server is running on http://localhost:${config.port}`);
   });
 
   const exitHandler = () => {
     if (server) {
       server.close(() => {
-        logger.info('Server closed');
+        // logger.info('Server closed');
+        console.log('Server closed');
       });
     }
     process.exit(1);
   };
 
   const unexpectedErrorHandler = (error: unknown) => {
-    errorlogger.error(error);
+    // errorlogger.error(error);
+    console.error(error);
     exitHandler();
   };
 
@@ -36,7 +41,8 @@ async function bootstrap() {
   process.on('unhandledRejection', unexpectedErrorHandler);
 
   process.on('SIGTERM', () => {
-    logger.info('SIGTERM received');
+    // logger.info('SIGTERM received');
+    console.log('SIGTERM received');
     if (server) {
       server.close();
     }
